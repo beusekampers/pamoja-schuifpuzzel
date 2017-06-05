@@ -1,0 +1,53 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+body * {
+    position: absolute;
+    display: block;
+    margin:0px; padding:0px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    background-repeat: no-repeat;
+}
+background{
+    width: 600px;
+    height: 600px;
+    background-image: url("../images/floor.png");
+    background-size: cover;
+    background-position: center;
+    left: 0;
+    top: 0;
+}
+
+block{
+    background-size: cover;
+}
+
+player{
+    width: 80px;
+    height: 80px;
+    /*background-image: url(images/character.png);*/
+    background-size: cover;
+    z-index: 5;
+}
+
+door{
+    width: 20px;
+    height: 100px;
+    background-image: url(../images/door.png);
+    background-size: cover;
+    z-index: 4;
+}
+
+finish{
+    background-size: contain;
+    background-position: center;
+}
+
+character {
+    
+    background-size: cover;
+    background-position: center;
+}
