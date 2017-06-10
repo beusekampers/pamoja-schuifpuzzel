@@ -117,66 +117,66 @@ var Block = (function () {
     return Block;
 }());
 var Character = (function () {
-    function Character() {
+    function Character(x, y) {
+        this.speed = 10;
+        this.posX = x;
+        this.posY = y;
         this.div = document.createElement("character");
         this.div.style.width = "80px";
         this.div.style.height = "80px";
-        this.div.style.top = "210px";
-        this.div.style.left = "210px";
+        this.div.style.transform = "translate(" + this.posX + "px," + this.posY + "px)";
         this.div.style.backgroundImage = "url(images/character-2.png)";
         document.body.appendChild(this.div);
     }
-    return Character;
-}());
-var Door = (function () {
-    function Door(x, y) {
-        this.posX = x;
-        this.posY = y;
-        this.div = document.createElement("door");
-        document.body.appendChild(this.div);
+    Character.prototype.move = function () {
+        this.posX += this.speed;
         this.div.style.transform = "translate(" + this.posX + "px," + this.posY + "px)";
-    }
-    return Door;
-}());
-var Finish = (function () {
-    function Finish() {
-        this.width = 280;
-        this.height = 80;
-        this.posX = 320;
-        this.posY = 210;
-        this.div = document.createElement("finish");
-        this.div.style.width = this.width + "px";
-        this.div.style.height = this.height + "px";
-        this.div.style.top = this.posY + "px";
-        this.div.style.left = this.posX + "px";
-        this.div.style.backgroundImage = "url(images/direction.png)";
-        document.body.appendChild(this.div);
-    }
-    Finish.prototype.move = function () {
+        if (this.posX == 520) {
+            this.speed = 0;
+        }
     };
-    return Finish;
+    return Character;
 }());
 var Game = (function () {
     function Game() {
+        this.coinCount = 0;
         this.gameFinished = false;
         this.finishCount = 0;
         this.player = new Player(100, 100);
         this.door = new Door(580, 200);
         this.finish = new Finish();
-        this.character = new Character();
+        this.character = new Character(210, 210);
         this.furniture = new Array();
         this.furniture.push(new Block(2, "couch", "hor", 300, 400));
         this.furniture.push(new Block(1, "bed", "hor", 0, 200));
         this.furniture.push(new Block(1, "table", "vert", 300, 100));
         this.furniture.push(new Block(1, "table", "vert", 400, 200));
-        this.grid = new Array(6);
-        this.finishCounter();
+        this.coinCounter = document.createElement("coinCounter");
+        document.body.appendChild(this.coinCounter);
+        this.coinCounter.innerHTML = "Munten: " + this.coinCount + "/3";
+        this.coins = new Array();
+        this.coins.push(new Coin(325, 25, this));
+        this.coins.push(new Coin(25, 225, this));
+        this.coins.push(new Coin(325, 425, this));
         requestAnimationFrame(this.gameLoop.bind(this));
     }
     Game.prototype.gameLoop = function () {
         this.player.move();
-        for (var _i = 0, _a = this.furniture; _i < _a.length; _i++) {
-            var f = _a[_i];
+        this.finishCounter();
+        for (var _i = 0, _a = this.coins; _i < _a.length; _i++) {
+            var c = _a[_i];
+            if (c.collision()) {
+                this.updateCoinCount();
+                this.coins.splice(this.coins.indexOf(c), 1);
+                c.remove();
+                c = undefined;
+                console.log(this.coins);
+            }
+            else {
+            }
+        }
+        for (var _b = 0, _c = this.furniture; _b < _c.length; _b++) {
+            var f = _c[_b];
             f.move();
             if (this.player.posX < f.posX + f.width &&
                 this.player.posX + this.player.width > f.posX &&
@@ -224,8 +224,13 @@ var Game = (function () {
                 f.topHit = false;
             }
         }
-        if (this.allTrue(this.furniture)) {
-            console.log("GAME UITGESPEELD!");
+        if (this.furniture.every(this.finishChecker)) {
+            this.character.move();
+            if (this.end == null) {
+                this.end = new End();
+            }
+            else {
+            }
         }
         requestAnimationFrame(this.gameLoop.bind(this));
     };
@@ -236,25 +241,96 @@ var Game = (function () {
                 f.posX + f.width > this.finish.posX &&
                 f.posY < this.finish.posY + this.finish.height &&
                 f.height + f.posY > this.finish.posY) {
-                f.touchingFinish = true;
-            }
-            else {
                 f.touchingFinish = false;
             }
-        }
-    };
-    Game.prototype.checkFinish = function (el, index) {
-        return el.touchingFinish;
-    };
-    Game.prototype.allTrue = function (obj) {
-        for (var o in obj) {
-            if (!obj[o].touchingFinish) {
-                return true;
+            else {
+                f.touchingFinish = true;
             }
         }
-        return false;
+    };
+    Game.prototype.finishChecker = function (el) {
+        if (el.touchingFinish) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    Game.prototype.updateCoinCount = function () {
+        this.coinCount++;
+        this.coinCounter.innerHTML = "Munten: " + this.coinCount + "/3";
     };
     return Game;
+}());
+var Coin = (function () {
+    function Coin(x, y, g) {
+        this.width = 50;
+        this.height = 50;
+        this.game = g;
+        this.posX = x;
+        this.posY = y;
+        this.div = document.createElement("coin");
+        document.body.appendChild(this.div);
+        this.div.style.transform = "translate(" + this.posX + "px," + this.posY + "px)";
+    }
+    Coin.prototype.collision = function () {
+        if (this.game.player.posX < this.posX + this.width &&
+            this.game.player.posX + this.game.player.width > this.posX &&
+            this.game.player.posY < this.posY + this.height &&
+            this.game.player.height + this.game.player.posY > this.posY) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    Coin.prototype.remove = function () {
+        this.div.remove();
+    };
+    return Coin;
+}());
+var Door = (function () {
+    function Door(x, y) {
+        this.posX = x;
+        this.posY = y;
+        this.div = document.createElement("door");
+        document.body.appendChild(this.div);
+        this.div.style.transform = "translate(" + this.posX + "px," + this.posY + "px)";
+    }
+    return Door;
+}());
+var End = (function () {
+    function End() {
+        this.div = document.createElement("endScreen");
+        document.body.appendChild(this.div);
+        this.title = document.createElement("title");
+        this.title.innerHTML = "De weg naar de deur is vrij!";
+        this.div.appendChild(this.title);
+        this.info = document.createElement("info");
+        this.info.innerHTML = "Pip heeft de weg naar de deur voor jou vrij gemaakt, je bent weer een stapje dichter bij Pamoja World!";
+        this.div.appendChild(this.info);
+    }
+    End.prototype.remove = function () {
+    };
+    return End;
+}());
+var Finish = (function () {
+    function Finish() {
+        this.width = 280;
+        this.height = 80;
+        this.posX = 320;
+        this.posY = 210;
+        this.div = document.createElement("finish");
+        this.div.style.width = this.width + "px";
+        this.div.style.height = this.height + "px";
+        this.div.style.top = this.posY + "px";
+        this.div.style.left = this.posX + "px";
+        this.div.style.backgroundImage = "url(images/direction.png)";
+        document.body.appendChild(this.div);
+    }
+    Finish.prototype.move = function () {
+    };
+    return Finish;
 }());
 window.addEventListener("load", function () {
     new Game();
@@ -320,18 +396,22 @@ var Player = (function () {
     Player.prototype.onKeyDown = function (event) {
         switch (event.keyCode) {
             case this.upKey:
+            case 38:
                 this.upSpeed = 10;
                 this.player.style.backgroundPositionX = "-" + this.width + "px";
                 break;
             case this.downKey:
+            case 40:
                 this.downSpeed = 10;
                 this.player.style.backgroundPositionX = "-" + this.width * 3 + "px";
                 break;
             case this.leftKey:
+            case 37:
                 this.leftSpeed = 10;
                 this.player.style.backgroundPositionX = "-" + this.width * 2 + "px";
                 break;
             case this.rightKey:
+            case 39:
                 this.rightSpeed = 10;
                 this.player.style.backgroundPositionX = "0px";
                 break;

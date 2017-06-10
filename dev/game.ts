@@ -1,6 +1,6 @@
 class Game {
 
-    private player : Player;
+    public player : Player;
     private testBlock : Block;
     private testBlock2 : Block;
     private testBlock3 : Block;
@@ -8,9 +8,13 @@ class Game {
     private finish : Finish;
     private character : Character;
     private furniture : Array<Block>;
+    private coins : Array<Coin>;
+    private coinCounter : HTMLElement;
+    private coinCount : number = 0;
     private grid:Array<number>;
     private gameFinished: boolean = false;
     private finishCount : number = 0;
+    private end : End;
 
     constructor() {
         // create player
@@ -20,20 +24,23 @@ class Game {
         // create finish
         this.finish = new Finish();
         // create character
-        this.character = new Character();
+        this.character = new Character(210, 210);
         // create furniture
         this.furniture = new Array<Block>();
         this.furniture.push(new Block(2, "couch", "hor", 300, 400));
         this.furniture.push(new Block(1, "bed", "hor", 0, 200));
         this.furniture.push(new Block(1, "table", "vert", 300, 100));
         this.furniture.push(new Block(1, "table", "vert", 400, 200));
+        // create coin counter
+        this.coinCounter = document.createElement("coinCounter");
+        document.body.appendChild(this.coinCounter);
+        this.coinCounter.innerHTML = "Munten: "+this.coinCount+"/3";
+        // create coins
+        this.coins = new Array<Coin>();
+        this.coins.push(new Coin(325, 25, this));
+        this.coins.push(new Coin(25, 225, this));
+        this.coins.push(new Coin(325, 425, this));
         
-        this.grid = new Array<number>(6);
-        // for(let i:number = 0; i > 3; i++){
-        //     this.grid[i] = new Array(6);
-        // }        
-        
-        this.finishCounter();
         // game loop
         requestAnimationFrame(this.gameLoop.bind(this));
     }
@@ -41,6 +48,23 @@ class Game {
     private gameLoop(){
         // console.log(this.player.rightSpeed);
         this.player.move();
+
+        // check if finish conditions are met
+        this.finishCounter();
+
+        // coin hit detector
+        for(let c of this.coins){
+            if(c.collision()){
+                this.updateCoinCount();
+                this.coins.splice(this.coins.indexOf(c), 1);
+                c.remove();
+                c = undefined;
+                console.log(this.coins);
+
+            } else {
+
+            }
+        }
 
         // block player collision detection
         for(let f of this.furniture){            
@@ -52,27 +76,27 @@ class Game {
                 this.player.height + this.player.posY > f.posY) {
                 // console.log("Main collision!");
                 if(f.leftHit){
-                    // console.log("Move right!");
                     f.posX += f.rightSpeed;
                     f.div.style.left = f.posX + "px";
+                    // console.log("Move right!");
                     // this.player.rightSpeed = 0;
                 }
                 if(f.rightHit){
-                    // console.log("Move left!");
                     f.posX -= f.leftSpeed;
                     f.div.style.left = f.posX + "px";
+                    // console.log("Move left!");
                     // this.player.leftSpeed = 0;
                 }
                 if(f.bottomHit){
-                    // console.log("Move up!");
                     f.posY -= f.upSpeed;
                     f.div.style.top = f.posY + "px";
-                    // this.player.downSpeed = 0;
+                    // console.log("Move up!");
+                    // this.player.downSpeed = 0; 
                 }
                 if(f.topHit){
-                    // console.log("Move down!");
                     f.posY += f.downSpeed;
                     f.div.style.top = f.posY + "px";
+                    // console.log("Move down!");
                     // this.player.upSpeed = 0;
                 }
                 
@@ -93,24 +117,20 @@ class Game {
                 // console.log("top hit!");
                 f.topHit = true;
             } else {f.topHit = false}
+        }     
 
-            // if (this.finish.posX                        < f.posX + f.width && 
-            //     this.finish.posX + this.finish.width    > f.posX &&
-            //     this.finish.posY                        < f.posY + f.height &&
-            //     this.finish.height + this.finish.posY   > f.posY) {
-            //     console.log("Doorway blocked...");
-            //     this.gameFinished = false;
-            // } else {                
-            //     console.log("Doorway cleared...");
-            //     this.gameFinished = true;
-            // }
-        }       
-        if(this.allTrue(this.furniture)){
-            console.log("GAME UITGESPEELD!");
+        //check if any Furniture from the array is touching the finish path  
+        if(this.furniture.every(this.finishChecker)){
+            this.character.move();
+            // test end
+            if(this.end == null){
+                this.end = new End();
+            } else{
+                
+            }
+            
         }
         
-        // console.log(this.furniture);
-        // console.log(this.furniture.every(this.checkFinishCounter));
         // hiermee wordt de gameloop opnieuw aangeroepen
         requestAnimationFrame(this.gameLoop.bind(this)); 
     }
@@ -118,28 +138,30 @@ class Game {
     private finishCounter() : void{
         for(let f of this.furniture){ 
         // Check if furniture is touching the finish
-            if (f.posX < this.finish.posX + this.finish.width && 
-                f.posX + f.width > this.finish.posX &&
-                f.posY < this.finish.posY + this.finish.height &&
-                f.height + f.posY > this.finish.posY) {
-                    f.touchingFinish = true;
-                // console.log("Doorway blocked...");
-                // this.gameFinished = false;
+            if (f.posX              < this.finish.posX + this.finish.width && 
+                f.posX + f.width    > this.finish.posX &&
+                f.posY              < this.finish.posY + this.finish.height &&
+                f.height + f.posY   > this.finish.posY) {
+                    f.touchingFinish = false;
             } else {              
-                // console.log("Doorway cleared...");
-                // this.gameFinished = true;
-                f.touchingFinish = false;
+                f.touchingFinish = true;
             }
         }
+    }
 
+    private finishChecker(el){
+        if(el.touchingFinish){
+            // console.log(el.touchingFinish);
+            return true;
+        } else{
+            // console.log(el.touchingFinish);
+            return false;
+        }
     }
-    private checkFinish(el, index){
-        return el.touchingFinish;
+
+    private updateCoinCount() : void {
+        this.coinCount++;
+        this.coinCounter.innerHTML = "Munten: "+this.coinCount+"/3";
     }
-    private allTrue(obj){
-        for(var o in obj){
-            if(!obj[o].touchingFinish){ return true;}
-        }            
-        return false;
-    }
+
 } 

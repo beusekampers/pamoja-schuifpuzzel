@@ -72,18 +72,22 @@ class Player{
      onKeyDown(event:KeyboardEvent):void {
         switch(event.keyCode){
         case this.upKey:
+        case 38:
             this.upSpeed = 10;
             this.player.style.backgroundPositionX = "-"+this.width+"px";
             break;
         case this.downKey:
+        case 40:
             this.downSpeed = 10;
             this.player.style.backgroundPositionX = "-"+this.width*3+"px";
             break;
         case this.leftKey:
+        case 37:
             this.leftSpeed = 10;
             this.player.style.backgroundPositionX = "-"+this.width*2+"px";
             break;
         case this.rightKey:
+        case 39:
             this.rightSpeed = 10;
             this.player.style.backgroundPositionX = "0px";
             break;
