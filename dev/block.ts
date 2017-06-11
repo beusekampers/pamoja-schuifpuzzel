@@ -1,15 +1,21 @@
 class Block {
     
     public div : HTMLElement;
+
     private size : number;
     public width : number;
     public height : number;
+
     public posX : number;
     public posY : number;
+
     public pushable : boolean;
-    private furn : any;
-    private orientation : any;
+
+    private furn : string;
+    private orientation : string;
+
     private postition : number; //X and Y coordinates
+
     public upSpeed : number = 0;
     public downSpeed : number = 0;
     public leftSpeed : number = 0;
@@ -27,8 +33,13 @@ class Block {
     public rightFurnitureHit : boolean = false;
     public bottomFurnitureHit : boolean = false;
     // private backgroundSize = document.body.getElement
+
+    private game : Game;
     
-    constructor(size, furn, orientation, x, y) {
+    constructor(size, furn, orientation, x, y, g:Game) {
+
+        this.game = g;
+
         //catch given parameters
         this.furn = furn;
         this.size = size;
@@ -126,6 +137,55 @@ class Block {
         } else {
             this.rightSpeed = 100;
         }
+    }
+
+    public collision() : void {
+        if (this.game.player.posX < this.posX + this.width && 
+            this.game.player.posX + this.game.player.width > this.posX &&
+            this.game.player.posY < this.posY + this.height &&
+            this.game.player.height + this.game.player.posY > this.posY) {
+                // console.log("Main collision!");
+                if(this.leftHit){
+                    this.posX += this.rightSpeed;
+                    this.div.style.left = this.posX + "px";
+                    // console.log("Move right!");
+                    // this.player.rightSpeed = 0;
+                }
+                if(this.rightHit){
+                    this.posX -= this.leftSpeed;
+                    this.div.style.left = this.posX + "px";
+                    // console.log("Move left!");
+                    // this.player.leftSpeed = 0;
+                }
+                if(this.bottomHit){
+                    this.posY -= this.upSpeed;
+                    this.div.style.top = this.posY + "px";
+                    // console.log("Move up!");
+                    // this.player.downSpeed = 0; 
+                }
+                if(this.topHit){
+                    this.posY += this.downSpeed;
+                    this.div.style.top = this.posY + "px";
+                    // console.log("Move down!");
+                    // this.player.upSpeed = 0;
+                }
+            }
+            if(this.game.player.posX + this.game.player.width == this.posX){
+                // console.log("left hit!");
+                this.leftHit = true;
+            } else {this.leftHit = false;}
+            if(this.game.player.posX == this.posX + this.width){
+                // console.log("right hit!");
+                this.rightHit = true;
+            } else {this.rightHit = false;}
+            if(this.game.player.posY == this.posY + this.height){
+                // console.log("bottom hit!");
+                this.bottomHit = true;
+            } else {this.bottomHit = false;}
+            if(this.game.player.posY + this.game.player.height == this.posY ){
+                // console.log("top hit!");
+                this.topHit = true;
+            } else {this.topHit = false}       
     }
 }
 

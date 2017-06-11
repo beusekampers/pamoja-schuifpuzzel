@@ -1,5 +1,5 @@
 var Block = (function () {
-    function Block(size, furn, orientation, x, y) {
+    function Block(size, furn, orientation, x, y, g) {
         this.upSpeed = 0;
         this.downSpeed = 0;
         this.leftSpeed = 0;
@@ -12,6 +12,7 @@ var Block = (function () {
         this.leftFurnitureHit = false;
         this.rightFurnitureHit = false;
         this.bottomFurnitureHit = false;
+        this.game = g;
         this.furn = furn;
         this.size = size;
         this.orientation = orientation;
@@ -114,6 +115,53 @@ var Block = (function () {
             this.rightSpeed = 100;
         }
     };
+    Block.prototype.collision = function () {
+        if (this.game.player.posX < this.posX + this.width &&
+            this.game.player.posX + this.game.player.width > this.posX &&
+            this.game.player.posY < this.posY + this.height &&
+            this.game.player.height + this.game.player.posY > this.posY) {
+            if (this.leftHit) {
+                this.posX += this.rightSpeed;
+                this.div.style.left = this.posX + "px";
+            }
+            if (this.rightHit) {
+                this.posX -= this.leftSpeed;
+                this.div.style.left = this.posX + "px";
+            }
+            if (this.bottomHit) {
+                this.posY -= this.upSpeed;
+                this.div.style.top = this.posY + "px";
+            }
+            if (this.topHit) {
+                this.posY += this.downSpeed;
+                this.div.style.top = this.posY + "px";
+            }
+        }
+        if (this.game.player.posX + this.game.player.width == this.posX) {
+            this.leftHit = true;
+        }
+        else {
+            this.leftHit = false;
+        }
+        if (this.game.player.posX == this.posX + this.width) {
+            this.rightHit = true;
+        }
+        else {
+            this.rightHit = false;
+        }
+        if (this.game.player.posY == this.posY + this.height) {
+            this.bottomHit = true;
+        }
+        else {
+            this.bottomHit = false;
+        }
+        if (this.game.player.posY + this.game.player.height == this.posY) {
+            this.topHit = true;
+        }
+        else {
+            this.topHit = false;
+        }
+    };
     return Block;
 }());
 var Character = (function () {
@@ -147,10 +195,10 @@ var Game = (function () {
         this.finish = new Finish();
         this.character = new Character(210, 210);
         this.furniture = new Array();
-        this.furniture.push(new Block(2, "couch", "hor", 300, 400));
-        this.furniture.push(new Block(1, "bed", "hor", 0, 200));
-        this.furniture.push(new Block(1, "table", "vert", 300, 100));
-        this.furniture.push(new Block(1, "table", "vert", 400, 200));
+        this.furniture.push(new Block(2, "couch", "hor", 300, 400, this));
+        this.furniture.push(new Block(1, "bed", "hor", 0, 200, this));
+        this.furniture.push(new Block(1, "table", "vert", 300, 100, this));
+        this.furniture.push(new Block(1, "table", "vert", 400, 200, this));
         this.coinCounter = document.createElement("coinCounter");
         document.body.appendChild(this.coinCounter);
         this.coinCounter.innerHTML = "Munten: " + this.coinCount + "/3";
@@ -178,51 +226,7 @@ var Game = (function () {
         for (var _b = 0, _c = this.furniture; _b < _c.length; _b++) {
             var f = _c[_b];
             f.move();
-            if (this.player.posX < f.posX + f.width &&
-                this.player.posX + this.player.width > f.posX &&
-                this.player.posY < f.posY + f.height &&
-                this.player.height + this.player.posY > f.posY) {
-                if (f.leftHit) {
-                    f.posX += f.rightSpeed;
-                    f.div.style.left = f.posX + "px";
-                }
-                if (f.rightHit) {
-                    f.posX -= f.leftSpeed;
-                    f.div.style.left = f.posX + "px";
-                }
-                if (f.bottomHit) {
-                    f.posY -= f.upSpeed;
-                    f.div.style.top = f.posY + "px";
-                }
-                if (f.topHit) {
-                    f.posY += f.downSpeed;
-                    f.div.style.top = f.posY + "px";
-                }
-            }
-            if (this.player.posX + this.player.width == f.posX) {
-                f.leftHit = true;
-            }
-            else {
-                f.leftHit = false;
-            }
-            if (this.player.posX == f.posX + f.width) {
-                f.rightHit = true;
-            }
-            else {
-                f.rightHit = false;
-            }
-            if (this.player.posY == f.posY + f.height) {
-                f.bottomHit = true;
-            }
-            else {
-                f.bottomHit = false;
-            }
-            if (this.player.posY + this.player.height == f.posY) {
-                f.topHit = true;
-            }
-            else {
-                f.topHit = false;
-            }
+            f.collision();
         }
         if (this.furniture.every(this.finishChecker)) {
             this.character.move();
