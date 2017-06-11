@@ -96,7 +96,7 @@ var Block = (function () {
         else {
             this.upSpeed = 100;
         }
-        if (this.posY >= 500) {
+        if (this.posY + (this.height - 100) >= 500) {
             this.downSpeed = 0;
         }
         else {
@@ -108,7 +108,7 @@ var Block = (function () {
         else {
             this.leftSpeed = 100;
         }
-        if (this.posX + this.width / 2 > 400) {
+        if (this.posX + (this.width - 100) > 400) {
             this.rightSpeed = 0;
         }
         else {
@@ -189,7 +189,6 @@ var Game = (function () {
     function Game() {
         this.coinCount = 0;
         this.gameFinished = false;
-        this.finishCount = 0;
         this.player = new Player(100, 100);
         this.door = new Door(580, 200);
         this.finish = new Finish();
