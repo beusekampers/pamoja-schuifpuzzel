@@ -336,7 +336,11 @@ var Finish = (function () {
     return Finish;
 }());
 window.addEventListener("load", function () {
-    new Game();
+    var start = new Start();
+    document.getElementById('startButton').onclick = function () {
+        start.remove();
+        new Game();
+    };
 });
 var Player = (function () {
     function Player(x, y) {
@@ -424,5 +428,27 @@ var Player = (function () {
         this.upSpeed = this.downSpeed = this.leftSpeed = this.rightSpeed = 0;
     };
     return Player;
+}());
+var Start = (function () {
+    function Start() {
+        this.div = document.createElement("startContainer");
+        this.title = document.createElement("startTitle");
+        this.div.appendChild(this.title);
+        this.title.innerHTML = "Schuifpuzzel game!";
+        this.button = document.createElement("button");
+        this.div.appendChild(this.button);
+        this.button.innerHTML = "START";
+        this.button.id = "startButton";
+        document.body.appendChild(this.div);
+    }
+    Start.prototype.remove = function () {
+        this.title.remove();
+        this.title = undefined;
+        this.button.remove();
+        this.button = undefined;
+        this.div.remove();
+        this.div = undefined;
+    };
+    return Start;
 }());
 //# sourceMappingURL=main.js.map
