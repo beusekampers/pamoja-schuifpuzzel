@@ -1,169 +1,13 @@
-var Block = (function () {
-    function Block(size, furn, orientation, x, y, g) {
-        this.upSpeed = 0;
-        this.downSpeed = 0;
-        this.leftSpeed = 0;
-        this.rightSpeed = 0;
-        this.topHit = false;
-        this.leftHit = false;
-        this.rightHit = false;
-        this.bottomHit = false;
-        this.topFurnitureHit = false;
-        this.leftFurnitureHit = false;
-        this.rightFurnitureHit = false;
-        this.bottomFurnitureHit = false;
-        this.game = g;
-        this.furn = furn;
-        this.size = size;
-        this.orientation = orientation;
-        this.div = document.createElement("block");
-        if (this.orientation == "hor") {
-            this.div.classList.add("hor");
-            if (this.size == 1) {
-                this.width = 200;
-                this.div.style.width = "200px";
-                this.div.style.backgroundImage = "url(images/hor-furn.png)";
-                if (furn == "bed") {
-                    this.div.style.backgroundPosition = "0 0";
-                }
-                else if (furn == "couch") {
-                    this.div.style.backgroundPosition = "0 -100px";
-                }
-                else if (furn == "table") {
-                    this.div.style.backgroundPosition = "0 -200px";
-                }
-            }
-            else if (this.size == 2) {
-                this.width = 300;
-                this.div.style.width = "300px";
-                this.div.style.backgroundImage = "url(images/hor-furn-big.png)";
-                if (furn == "bed") {
-                    this.div.style.backgroundPosition = "0 0";
-                }
-                else if (furn == "couch") {
-                    this.div.style.backgroundPosition = "0 -100px";
-                }
-                else if (furn == "table") {
-                    this.div.style.backgroundPosition = "0 -200px";
-                }
-            }
-            this.height = 100;
-            this.div.style.height = "100px";
-        }
-        if (this.orientation == "vert") {
-            this.div.classList.add("vert");
-            if (this.size == 1) {
-                this.height = 200;
-                this.div.style.height = "200px";
-                this.div.style.backgroundImage = "url(images/vert-furn.png)";
-                if (furn == "bed") {
-                    this.div.style.backgroundPosition = "0 0";
-                }
-                else if (furn == "couch") {
-                    this.div.style.backgroundPosition = "-100px 0";
-                }
-                else if (furn == "table") {
-                    this.div.style.backgroundPosition = "-200px 0";
-                }
-            }
-            else if (this.size == 2) {
-                this.height = 300;
-                this.div.style.height = "300px";
-                this.div.style.backgroundImage = "url(images/vert-furn-big.png)";
-                if (furn == "bed") {
-                    this.div.style.backgroundPosition = "0 0";
-                }
-                else if (furn == "couch") {
-                    this.div.style.backgroundPosition = "-100px 0";
-                }
-                else if (furn == "table") {
-                    this.div.style.backgroundPosition = "-200px 0";
-                }
-            }
-            this.width = 100;
-            this.div.style.width = "100px";
-        }
-        this.posX = x;
-        this.posY = y;
-        this.div.style.left = x + "px";
-        this.div.style.top = y + "px";
-        document.body.appendChild(this.div);
-    }
-    Block.prototype.move = function () {
-        if (this.posY <= 0) {
-            this.upSpeed = 0;
-        }
-        else {
-            this.upSpeed = 100;
-        }
-        if (this.posY + (this.height - 100) >= 500) {
-            this.downSpeed = 0;
-        }
-        else {
-            this.downSpeed = 100;
-        }
-        if (this.posX < 100) {
-            this.leftSpeed = 0;
-        }
-        else {
-            this.leftSpeed = 100;
-        }
-        if (this.posX + (this.width - 100) > 400) {
-            this.rightSpeed = 0;
-        }
-        else {
-            this.rightSpeed = 100;
-        }
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    Block.prototype.collision = function () {
-        if (this.game.player.posX < this.posX + this.width &&
-            this.game.player.posX + this.game.player.width > this.posX &&
-            this.game.player.posY < this.posY + this.height &&
-            this.game.player.height + this.game.player.posY > this.posY) {
-            if (this.leftHit) {
-                this.posX += this.rightSpeed;
-                this.div.style.left = this.posX + "px";
-            }
-            if (this.rightHit) {
-                this.posX -= this.leftSpeed;
-                this.div.style.left = this.posX + "px";
-            }
-            if (this.bottomHit) {
-                this.posY -= this.upSpeed;
-                this.div.style.top = this.posY + "px";
-            }
-            if (this.topHit) {
-                this.posY += this.downSpeed;
-                this.div.style.top = this.posY + "px";
-            }
-        }
-        if (this.game.player.posX + this.game.player.width == this.posX) {
-            this.leftHit = true;
-        }
-        else {
-            this.leftHit = false;
-        }
-        if (this.game.player.posX == this.posX + this.width) {
-            this.rightHit = true;
-        }
-        else {
-            this.rightHit = false;
-        }
-        if (this.game.player.posY == this.posY + this.height) {
-            this.bottomHit = true;
-        }
-        else {
-            this.bottomHit = false;
-        }
-        if (this.game.player.posY + this.game.player.height == this.posY) {
-            this.topHit = true;
-        }
-        else {
-            this.topHit = false;
-        }
-    };
-    return Block;
-}());
+})();
 var Character = (function () {
     function Character(x, y) {
         this.speed = 10;
@@ -194,10 +38,10 @@ var Game = (function () {
         this.finish = new Finish();
         this.character = new Character(210, 210);
         this.furniture = new Array();
-        this.furniture.push(new Block(2, "couch", "hor", 300, 400, this));
-        this.furniture.push(new Block(1, "bed", "hor", 0, 200, this));
-        this.furniture.push(new Block(1, "table", "vert", 300, 100, this));
-        this.furniture.push(new Block(1, "table", "vert", 400, 200, this));
+        this.furniture.push(new Sofa(2, "hor", 300, 400, this));
+        this.furniture.push(new Sofa(1, "hor", 0, 200, this));
+        this.furniture.push(new Table(1, "vert", 300, 100, this));
+        this.furniture.push(new Table(1, "vert", 400, 200, this));
         this.coinCounter = document.createElement("coinCounter");
         document.body.appendChild(this.coinCounter);
         this.coinCounter.innerHTML = "Munten: " + this.coinCount + "/3";
@@ -335,6 +179,131 @@ var Finish = (function () {
     };
     return Finish;
 }());
+var Furniture = (function () {
+    function Furniture(size, orientation, x, y, g) {
+        this.upSpeed = 0;
+        this.downSpeed = 0;
+        this.leftSpeed = 0;
+        this.rightSpeed = 0;
+        this.topHit = false;
+        this.leftHit = false;
+        this.rightHit = false;
+        this.bottomHit = false;
+        this.topFurnitureHit = false;
+        this.leftFurnitureHit = false;
+        this.rightFurnitureHit = false;
+        this.bottomFurnitureHit = false;
+        this.game = g;
+        this.size = size;
+        this.orientation = orientation;
+        this.div = document.createElement("block");
+        if (this.orientation == "hor") {
+            this.div.classList.add("hor");
+            if (this.size == 1) {
+                this.width = 200;
+                this.div.style.width = "200px";
+            }
+            else if (this.size == 2) {
+                this.width = 300;
+                this.div.style.width = "300px";
+            }
+            this.height = 100;
+            this.div.style.height = "100px";
+        }
+        if (this.orientation == "vert") {
+            this.div.classList.add("vert");
+            if (this.size == 1) {
+                this.height = 200;
+                this.div.style.height = "200px";
+            }
+            else if (this.size == 2) {
+                this.height = 300;
+                this.div.style.height = "300px";
+            }
+            this.width = 100;
+            this.div.style.width = "100px";
+        }
+        this.posX = x;
+        this.posY = y;
+        this.div.style.left = x + "px";
+        this.div.style.top = y + "px";
+        document.body.appendChild(this.div);
+    }
+    Furniture.prototype.move = function () {
+        if (this.posY <= 0) {
+            this.upSpeed = 0;
+        }
+        else {
+            this.upSpeed = 100;
+        }
+        if (this.posY + (this.height - 100) >= 500) {
+            this.downSpeed = 0;
+        }
+        else {
+            this.downSpeed = 100;
+        }
+        if (this.posX < 100) {
+            this.leftSpeed = 0;
+        }
+        else {
+            this.leftSpeed = 100;
+        }
+        if (this.posX + (this.width - 100) > 400) {
+            this.rightSpeed = 0;
+        }
+        else {
+            this.rightSpeed = 100;
+        }
+    };
+    Furniture.prototype.collision = function () {
+        if (this.game.player.posX < this.posX + this.width &&
+            this.game.player.posX + this.game.player.width > this.posX &&
+            this.game.player.posY < this.posY + this.height &&
+            this.game.player.height + this.game.player.posY > this.posY) {
+            if (this.leftHit) {
+                this.posX += this.rightSpeed;
+                this.div.style.left = this.posX + "px";
+            }
+            if (this.rightHit) {
+                this.posX -= this.leftSpeed;
+                this.div.style.left = this.posX + "px";
+            }
+            if (this.bottomHit) {
+                this.posY -= this.upSpeed;
+                this.div.style.top = this.posY + "px";
+            }
+            if (this.topHit) {
+                this.posY += this.downSpeed;
+                this.div.style.top = this.posY + "px";
+            }
+        }
+        if (this.game.player.posX + this.game.player.width == this.posX) {
+            this.leftHit = true;
+        }
+        else {
+            this.leftHit = false;
+        }
+        if (this.game.player.posX == this.posX + this.width) {
+            this.rightHit = true;
+        }
+        else {
+            this.rightHit = false;
+        }
+        if (this.game.player.posY == this.posY + this.height) {
+            this.bottomHit = true;
+        }
+        else {
+            this.bottomHit = false;
+        }
+        if (this.game.player.posY + this.game.player.height == this.posY) {
+            this.topHit = true;
+        }
+        else {
+            this.topHit = false;
+        }
+    };
+    return Furniture;
+}());
 window.addEventListener("load", function () {
     var start = new Start();
     document.getElementById('startButton').onclick = function () {
@@ -429,6 +398,36 @@ var Player = (function () {
     };
     return Player;
 }());
+var Sofa = (function (_super) {
+    __extends(Sofa, _super);
+    function Sofa(size, orientation, x, y, g) {
+        var _this = this;
+        var sizePass = size;
+        var orientationPass = orientation;
+        var xPos = x;
+        var yPos = y;
+        var game = g;
+        _this = _super.call(this, sizePass, orientationPass, xPos, yPos, game) || this;
+        if (size == 1) {
+            if (orientationPass == "vert") {
+                _this.div.style.backgroundImage = "url(images/sofa-vert.png)";
+            }
+            else {
+                _this.div.style.backgroundImage = "url(images/sofa.png)";
+            }
+        }
+        else {
+            if (orientationPass == "vert") {
+                _this.div.style.backgroundImage = "url(images/sofa-big-vert.png)";
+            }
+            else {
+                _this.div.style.backgroundImage = "url(images/sofa-big.png)";
+            }
+        }
+        return _this;
+    }
+    return Sofa;
+}(Furniture));
 var Start = (function () {
     function Start() {
         this.div = document.createElement("startContainer");
@@ -451,4 +450,34 @@ var Start = (function () {
     };
     return Start;
 }());
+var Table = (function (_super) {
+    __extends(Table, _super);
+    function Table(size, orientation, x, y, g) {
+        var _this = this;
+        var sizePass = size;
+        var orientationPass = orientation;
+        var xPos = x;
+        var yPos = y;
+        var game = g;
+        _this = _super.call(this, sizePass, orientationPass, xPos, yPos, game) || this;
+        if (size == 1) {
+            if (orientationPass == "vert") {
+                _this.div.style.backgroundImage = "url(images/table-vert.png)";
+            }
+            else {
+                _this.div.style.backgroundImage = "url(images/table.png)";
+            }
+        }
+        else {
+            if (orientationPass == "vert") {
+                _this.div.style.backgroundImage = "url(images/table-big-vert.png)";
+            }
+            else {
+                _this.div.style.backgroundImage = "url(images/table-big.png)";
+            }
+        }
+        return _this;
+    }
+    return Table;
+}(Furniture));
 //# sourceMappingURL=main.js.map

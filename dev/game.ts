@@ -28,10 +28,11 @@ class Game {
 
         // create furniture
         this.furniture = new Array<Furniture>();
-        this.furniture.push(new Furniture(2, "couch", "hor", 300, 400, this));
-        this.furniture.push(new Furniture(1, "bed", "hor", 0, 200, this));
-        this.furniture.push(new Furniture(1, "table", "vert", 300, 100, this));
-        this.furniture.push(new Furniture(1, "table", "vert", 400, 200, this));
+        this.furniture.push(new Sofa(2, "hor", 300, 400, this));
+        // this.furniture.push(new Bed(1, "hor", 0, 200, this));
+        this.furniture.push(new Sofa(1, "hor", 0, 200, this));//bed replacement
+        this.furniture.push(new Table(1, "vert", 300, 100, this));
+        this.furniture.push(new Table(1, "vert", 400, 200, this));
 
         // create coin counter
         this.coinCounter = document.createElement("coinCounter");

@@ -1,6 +1,6 @@
 class Furniture {
     
-    public div : HTMLElement;
+    protected div : HTMLElement;
 
     private size : number;
     public width : number;
@@ -11,7 +11,6 @@ class Furniture {
 
     public pushable : boolean;
 
-    private furn : string;
     private orientation : string;
 
     public upSpeed : number = 0;
@@ -34,12 +33,12 @@ class Furniture {
 
     private game : Game;
     
-    constructor(size, furn, orientation, x, y, g:Game) {
+    constructor(size, orientation, x, y, g:Game) {
 
         this.game = g;
 
         //catch given parameters
-        this.furn = furn;
+        // this.furn = furn;
         this.size = size;
         this.orientation = orientation;
 
@@ -55,17 +54,9 @@ class Furniture {
             if(this.size == 1){
                 this.width = 200;
                 this.div.style.width = "200px";
-                this.div.style.backgroundImage = "url(images/hor-furn.png)";
-                if(furn == "bed"){          this.div.style.backgroundPosition = "0 0"; }
-                else if(furn == "couch"){   this.div.style.backgroundPosition = "0 -100px"; }
-                else if(furn == "table"){   this.div.style.backgroundPosition = "0 -200px"; }
             } else if(this.size == 2){
                 this.width = 300;
                 this.div.style.width = "300px";
-                this.div.style.backgroundImage = "url(images/hor-furn-big.png)";
-                if(furn == "bed"){          this.div.style.backgroundPosition = "0 0"; }
-                else if(furn == "couch"){   this.div.style.backgroundPosition = "0 -100px"; }
-                else if(furn == "table"){   this.div.style.backgroundPosition = "0 -200px"; }
             }
             this.height = 100;
             this.div.style.height = "100px";
@@ -78,17 +69,9 @@ class Furniture {
             if(this.size == 1){
                 this.height = 200;
                 this.div.style.height = "200px";
-                this.div.style.backgroundImage = "url(images/vert-furn.png)";
-                if(furn == "bed"){          this.div.style.backgroundPosition = "0 0"; }
-                else if(furn == "couch"){   this.div.style.backgroundPosition = "-100px 0"; }
-                else if(furn == "table"){   this.div.style.backgroundPosition = "-200px 0"; }
             } else if(this.size == 2){
                 this.height = 300;
                 this.div.style.height = "300px";
-                this.div.style.backgroundImage = "url(images/vert-furn-big.png)";
-                if(furn == "bed"){          this.div.style.backgroundPosition = "0 0"; }
-                else if(furn == "couch"){   this.div.style.backgroundPosition = "-100px 0"; }
-                else if(furn == "table"){   this.div.style.backgroundPosition = "-200px 0"; }
             }
             this.width = 100;
             this.div.style.width = "100px";
