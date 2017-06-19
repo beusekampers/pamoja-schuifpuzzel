@@ -18,3 +18,5 @@ Met behulp van composition heb ik er voor gezorgd dat bepaalde classes andere cl
 
 ### Inherticance
 Mijn class furniture heeft meerdere classes die deze extenden; sofa, table & bed. Deze erfen in principe alle onderdelen van de furniture class maar zorgen alleen voor duidelijkheid binnen de code en de texture.
+
+![alt text](https://github.com/markjhvonk/pamoja-schuifpuzzel/pamoja-schuifpuzzel-uml.jpg "UML")
