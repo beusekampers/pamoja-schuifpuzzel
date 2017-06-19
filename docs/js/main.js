@@ -157,8 +157,6 @@ var End = (function () {
         this.info.innerHTML = "Pip heeft de weg naar de deur voor jou vrij gemaakt, je bent weer een stapje dichter bij Pamoja World!";
         this.div.appendChild(this.info);
     }
-    End.prototype.remove = function () {
-    };
     return End;
 }());
 var Finish = (function () {
@@ -175,8 +173,6 @@ var Finish = (function () {
         this.div.style.backgroundImage = "url(images/direction.png)";
         document.body.appendChild(this.div);
     }
-    Finish.prototype.move = function () {
-    };
     return Finish;
 }());
 var Furniture = (function () {
@@ -401,15 +397,11 @@ var Player = (function () {
 var Sofa = (function (_super) {
     __extends(Sofa, _super);
     function Sofa(size, orientation, x, y, g) {
-        var _this = this;
-        var sizePass = size;
-        var orientationPass = orientation;
-        var xPos = x;
-        var yPos = y;
-        var game = g;
-        _this = _super.call(this, sizePass, orientationPass, xPos, yPos, game) || this;
-        if (size == 1) {
-            if (orientationPass == "vert") {
+        var _this = _super.call(this, size, orientation, x, y, g) || this;
+        _this.orientationPass = orientation;
+        _this.sizePass = size;
+        if (_this.sizePass == 1) {
+            if (_this.orientationPass == "vert") {
                 _this.div.style.backgroundImage = "url(images/sofa-vert.png)";
             }
             else {
@@ -417,7 +409,7 @@ var Sofa = (function (_super) {
             }
         }
         else {
-            if (orientationPass == "vert") {
+            if (_this.orientationPass == "vert") {
                 _this.div.style.backgroundImage = "url(images/sofa-big-vert.png)";
             }
             else {
@@ -453,15 +445,11 @@ var Start = (function () {
 var Table = (function (_super) {
     __extends(Table, _super);
     function Table(size, orientation, x, y, g) {
-        var _this = this;
-        var sizePass = size;
-        var orientationPass = orientation;
-        var xPos = x;
-        var yPos = y;
-        var game = g;
-        _this = _super.call(this, sizePass, orientationPass, xPos, yPos, game) || this;
-        if (size == 1) {
-            if (orientationPass == "vert") {
+        var _this = _super.call(this, size, orientation, x, y, g) || this;
+        _this.orientationPass = orientation;
+        _this.sizePass = size;
+        if (_this.sizePass == 1) {
+            if (_this.orientationPass == "vert") {
                 _this.div.style.backgroundImage = "url(images/table-vert.png)";
             }
             else {
@@ -469,7 +457,7 @@ var Table = (function (_super) {
             }
         }
         else {
-            if (orientationPass == "vert") {
+            if (_this.orientationPass == "vert") {
                 _this.div.style.backgroundImage = "url(images/table-big-vert.png)";
             }
             else {

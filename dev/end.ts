@@ -13,8 +13,4 @@ class End{
         this.info.innerHTML = "Pip heeft de weg naar de deur voor jou vrij gemaakt, je bent weer een stapje dichter bij Pamoja World!"
         this.div.appendChild(this.info);
     }
-
-    public remove() {
-
-    }
 }

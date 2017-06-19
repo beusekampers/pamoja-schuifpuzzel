@@ -19,8 +19,4 @@ class Finish{
 
 
     }
-
-    move() : void {
-        
-    }
 }

@@ -1,23 +1,21 @@
 class Sofa extends Furniture{
 
-    // private orientation : string;
+    private sizePass : number;
+    private orientationPass : string;
 
     constructor(size, orientation, x, y, g:Game){
-        let sizePass = size;
-        let orientationPass = orientation
-        let xPos = x;
-        let yPos = y;
-        let game = g; 
-        super(sizePass, orientationPass, xPos, yPos, game);
+        super(size, orientation, x, y, g);
+        this.orientationPass = orientation;
+        this.sizePass = size;
 
-        if(size == 1){
-            if(orientationPass == "vert"){ 
+        if(this.sizePass == 1){
+            if(this.orientationPass == "vert"){ 
                 this.div.style.backgroundImage = "url(images/sofa-vert.png)";
             } else {
                 this.div.style.backgroundImage = "url(images/sofa.png)";
             }
         } else {
-            if(orientationPass == "vert"){
+            if(this.orientationPass == "vert"){
                 this.div.style.backgroundImage = "url(images/sofa-big-vert.png)";
             } else {
                 this.div.style.backgroundImage = "url(images/sofa-big.png)";

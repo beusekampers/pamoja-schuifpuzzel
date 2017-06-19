@@ -1,20 +1,20 @@
 // class Bed extends Furniture {
-//     constructor(size, orientation, x, y, g:Game){
-//         let sizePass = size;
-//         let orientationPass = orientation
-//         let xPos = x;
-//         let yPos = y;
-//         let game = g; 
-//         super(sizePass, orientationPass, xPos, yPos, game);
+//     private sizePass : number;
+//     private orientationPass : string;
 
-//         if(size == 1){
-//             if(orientationPass == "vert"){ 
+//     constructor(size, orientation, x, y, g:Game){
+//         super(size, orientation, x, y, g);
+//         this.orientationPass = orientation;
+//         this.sizePass = size;
+
+//         if(this.sizePass == 1){
+//             if(this.orientationPass == "vert"){ 
 //                 this.div.style.backgroundImage = "url(images/bed-vert.png)";
 //             } else {
 //                 this.div.style.backgroundImage = "url(images/bed.png)";
 //             }
 //         } else {
-//             if(orientationPass == "vert"){
+//             if(this.orientationPass == "vert"){
 //                 this.div.style.backgroundImage = "url(images/bed-big-vert.png)";
 //             } else {
 //                 this.div.style.backgroundImage = "url(images/bed-big.png)";

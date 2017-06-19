@@ -6,7 +6,6 @@ class Game {
     private character : Character;
     private furniture : Array<Furniture>;
     private coins : Array<Coin>;
-    private grid : Array<any>;
     private coinCounter : HTMLElement;
     private coinCount : number = 0;
     private gameFinished: boolean = false;
