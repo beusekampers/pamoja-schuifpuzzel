@@ -15,3 +15,6 @@ Met encapsulation heb ik er voor gezorgd dat alle variables en functies binnen m
 
 ### Composition
 Met behulp van composition heb ik er voor gezorgd dat bepaalde classes andere classes aan kunnen maken. Bijvoorbeeld binnen de class "game" worden de coins, furniture en characters/players aangemaakt.
+
+### Inherticance
+Mijn class furniture heeft meerdere classes die deze extenden; sofa, table & bed. Deze erfen in principe alle onderdelen van de furniture class maar zorgen alleen voor duidelijkheid binnen de code en de texture.
