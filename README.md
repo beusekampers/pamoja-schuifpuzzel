@@ -4,6 +4,14 @@ A small side project game
 ### Demo
 https://markjhvonk.github.io/pamoja-schuifpuzzel/
 
+### Spel handleiding
+Begin door op de start knop te drukken. Beweeg je character met W, A, S & D. Verzamel alle muntjes en maak de weg naar de deur vrij.
+
+### Installatie handleiding
+1. Download of fork het project.
+2. zet de contents uit het "docs" mapje over naar je gewenste locatie.
+3. navigeer naar die locatie om te spelen!
+
 ### Classes
 Ik heb classes gebruikt om bepaalde onderdelen in mijn game te kunnen aanspreken. Eigenlijk om heen de structuur van mijn game op orde te houden.
 
@@ -19,4 +27,4 @@ Met behulp van composition heb ik er voor gezorgd dat bepaalde classes andere cl
 ### Inherticance
 Mijn class furniture heeft meerdere classes die deze extenden; sofa, table & bed. Deze erfen in principe alle onderdelen van de furniture class maar zorgen alleen voor duidelijkheid binnen de code en de texture.
 
-![alt text](https://github.com/markjhvonk/pamoja-schuifpuzzel/blob/master/pamoja-schuifpuzzel-uml.jpg "UML")
+![alt text](https://github.com/markjhvonk/pamoja-schuifpuzzel/blob/master/pamoja-schuifpuzzel-uml-v2.jpg "UML")
