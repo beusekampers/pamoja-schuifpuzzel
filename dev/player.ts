@@ -69,7 +69,7 @@ class Player{
         }
     }
 
-     onKeyDown(event:KeyboardEvent):void {
+    private onKeyDown(event:KeyboardEvent):void {
         switch(event.keyCode){
         case this.upKey:
         case 38:
@@ -94,7 +94,12 @@ class Player{
         }
     }
         
-    onKeyUp(event:KeyboardEvent):void {
+    private onKeyUp(event:KeyboardEvent):void {
         this.upSpeed = this.downSpeed = this.leftSpeed = this.rightSpeed = 0;
+    }
+    public removePlayer(){
+        this.player.remove();
+
+        // this.player = undefined;
     }
 }

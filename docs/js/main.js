@@ -11,6 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 var Character = (function () {
     function Character(x, y) {
         this.speed = 10;
+        this.animationDone = false;
         this.posX = x;
         this.posY = y;
         this.div = document.createElement("character");
@@ -25,6 +26,7 @@ var Character = (function () {
         this.div.style.transform = "translate(" + this.posX + "px," + this.posY + "px)";
         if (this.posX == 520) {
             this.speed = 0;
+            this.animationDone = true;
         }
     };
     return Character;
@@ -73,10 +75,14 @@ var Game = (function () {
         }
         if (this.furniture.every(this.finishChecker)) {
             this.character.move();
-            if (this.end == null) {
-                this.end = new End();
-            }
-            else {
+            if (this.character.animationDone) {
+                this.player.removePlayer();
+                this.player = undefined;
+                if (this.end == null) {
+                    this.end = new End();
+                }
+                else {
+                }
             }
         }
         requestAnimationFrame(this.gameLoop.bind(this));
@@ -391,6 +397,9 @@ var Player = (function () {
     };
     Player.prototype.onKeyUp = function (event) {
         this.upSpeed = this.downSpeed = this.leftSpeed = this.rightSpeed = 0;
+    };
+    Player.prototype.removePlayer = function () {
+        this.player.remove();
     };
     return Player;
 }());

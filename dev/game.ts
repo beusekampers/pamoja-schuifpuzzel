@@ -79,11 +79,13 @@ class Game {
         // check if any Furniture from the array is touching the finish path  
         if(this.furniture.every(this.finishChecker)){
             this.character.move();
-            // test end
-            if(this.end == null){
-                this.end = new End();
-            } else{
-                
+            if(this.character.animationDone){
+                this.player.removePlayer(); this.player = undefined;
+                if(this.end == null){
+                    this.end = new End();
+                } else{
+                    
+                }
             }
         }
         

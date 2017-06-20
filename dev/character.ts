@@ -5,6 +5,7 @@ class Character{
     private posX : number;
     private posY : number;
     private speed : number = 10;
+    public animationDone : boolean = false
 
     constructor(x, y) {
         this.posX = x;
@@ -24,6 +25,7 @@ class Character{
         this.div.style.transform = "translate("+this.posX+"px,"+this.posY+"px)";
         if(this.posX == 520){
             this.speed = 0;
+            this.animationDone = true;
         }
     }
 }
