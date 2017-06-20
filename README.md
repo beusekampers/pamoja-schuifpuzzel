@@ -4,6 +4,11 @@ A small side project game
 ### Demo
 https://markjhvonk.github.io/pamoja-schuifpuzzel/
 
+### Installatie handleiding
+1 - Download of fork het project.
+2 - zet de contents uit het "docs" mapje over naar je gewenste locatie.
+3 - navigeer naar die locatie om te spelen!
+
 ### Classes
 Ik heb classes gebruikt om bepaalde onderdelen in mijn game te kunnen aanspreken. Eigenlijk om heen de structuur van mijn game op orde te houden.
 
